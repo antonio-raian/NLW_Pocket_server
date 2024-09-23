@@ -28,7 +28,7 @@ export async function createGoalCompletion({
       .groupBy(goalCompleted.goalId)
   );
 
-  const rest = await db
+  const data = await db
     .with(goalsCompletedCounts)
     .select({
       desiredWeeklyFrequency: goals.desiredWeeklyFrequency,
@@ -41,7 +41,7 @@ export async function createGoalCompletion({
     .where(eq(goals.id, goalId))
     .leftJoin(goalsCompletedCounts, eq(goals.id, goalsCompletedCounts.goalId));
 
-  const { completionCount, desiredWeeklyFrequency } = rest[0];
+  const { completionCount, desiredWeeklyFrequency } = data[0];
 
   if (completionCount >= desiredWeeklyFrequency) {
     throw new Error("Goal is already completed");
